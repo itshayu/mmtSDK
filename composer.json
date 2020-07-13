@@ -1,0 +1,24 @@
+{
+    "name": "itshayu\/mmtsdk",
+    "description": "喵喵推SDK",
+    "authors": [
+        {
+            "name": "itshayu",
+            "email": "zming.com@163.com"
+        }
+    ],
+
+    "autoload": {
+        "psr-4": {
+            "Itshayu\\MmtSDK\\": "src"
+        }
+    },
+
+    "require": {
+        "php": ">=7.0.0",
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.2"
+    }
+}
