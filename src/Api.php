@@ -42,13 +42,15 @@ class Api
         if ($response->getStatusCode() !== 200) {
             throw new \Exception($response->getBody());
         }
-
-        $res = json_decode($response->getBody(), true);
-        if ($res['code'] === 200) {
-            return $res['data'];
+        try {
+            $res = json_decode($response->getBody(), true);
+            if ($res['code'] === 200) {
+                return $res['data'];
+            }
+            throw new \Exception($res);
+        } catch (\Throwable $th) {
+            throw new \Exception($th->getMessage());
         }
-
-        throw new \Exception($res);
     }
 
     /**
@@ -56,10 +58,14 @@ class Api
      *
      * @return void
      */
-    public function report(array $data) : ResponseInterface
+    public function report(array $data) : array
     {
-        $res = $this->client->post('/service/v1/report', $data);
-        return $res;
+        try {
+            $res = $this->client->post('/service/v1/report', $data);
+            return $this->result($res);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
@@ -85,23 +91,33 @@ class Api
      * @param string $appUuid
      * @return ResponseInterface
      */
-    public function reportVisits(string $promoter, string $appUuid) : ResponseInterface
+    public function reportVisits(string $promoter, string $appUuid) : array
     {
-        $res = $this->client->get('/service/v1/report/visits/' . $promoter . '/' . $appUuid);
-        return $res;
+        try {
+            $res = $this->client->get('/service/v1/report/visits/' . $promoter . '/' . $appUuid);
+            return $this->result($res);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
      * 发布视频上报视频ID
      *
      * @param string $promoter 推广者
-     * @param string $appUuid APP
-     * @param string $videoId 发布的视频ID
-     * @return ResponseInterface
+     * @param string $appUuid 平台APPID
+     * @param string $appPath 拍摄时应用路径
+     * @param string $videoId 拍摄后的视频ID
+     * @param string $authDy 平台授权的抖音号
+     * @return array
      */
-    public function publishVideo(string $promoter, string $appUuid, string $videoId) : ResponseInterface
+    public function publishVideo(string $promoter, string $appUuid, string $appPath, string $videoId, string $authDy) : array
     {
-        $res = $this->client->get('/service/v1/publish/video/' . $promoter . '/' . $appUuid . '/' . $videoId);
-        return $res;
+        try {
+            $res = $this->client->get('/service/v1/publish/video/' . $promoter . '/' . $appUuid . '/' . base64_encode($appPath) . '/' . $videoId . '/' . $authDy);
+            return $this->result($res);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

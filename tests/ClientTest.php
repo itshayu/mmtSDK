@@ -16,7 +16,7 @@ class ClientTest extends TestCase
             'appid' => '6MqHy1xzB21Nxulq',
             'appsecret' => 'VgzCa3aBpdd3z8LVTBJZvjJTulwcASlc',
             'scheme' => 'http',
-            'host' => 'dev.qitui.cdkwtech.com',
+            'host' => 'dev.mmt.cdkwtech.com',
             'identity' => 'TLP'
         ]);
     }
@@ -83,7 +83,13 @@ class ClientTest extends TestCase
      */
     public function testPublishVideo()
     {
-        $res = $this->client->publishVideo('b8f3176e-161b-405f-a7cd-9bba78f751b8', '6571dba4-ec3a-4272-97f3-630d9bd8e182', '131040415b7f4767505c10155d2c453552512b42007e4c615457424d0d7a436d53514140017f');
-        echo $res->getBody();
+        $res = $this->client->publishVideo(
+            'b8f3176e-161b-405f-a7cd-9bba78f751b8',
+            '6571dba4-ec3a-4272-97f3-630d9bd8e182',
+            '/pages/info/info?sid=58',
+            '131040415b7f4767505c10155d2c453552512b42007e4c615457424d0d7a436d53514140017f',
+            '28f30088-d6f8-4cf1-81a5-da62b426e645'
+        );
+        print_r($res);
     }
 }
