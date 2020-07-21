@@ -104,17 +104,32 @@ class Api
     /**
      * 发布视频上报视频ID
      *
-     * @param string $promoter 推广者
+     * @param string $videoId 拍摄后的视频ID
+     * @param string $videoUuid 拍摄视频UUID
+     * @param string $userUuid 平台用户UUID
      * @param string $appUuid 平台APPID
      * @param string $appPath 拍摄时应用路径
-     * @param string $videoId 拍摄后的视频ID
      * @param string $authDy 平台授权的抖音号
      * @return array
      */
-    public function publishVideo(string $promoter, string $appUuid, string $appPath, string $videoId, string $authDy) : array
+    public function publishVideo(
+        string $videoId,
+        string $videoUuid,
+        string $userUuid,
+        string $appUuid,
+        string $appPath,
+        string $authDy
+    ) : array
     {
         try {
-            $res = $this->client->get('/service/v1/publish/video/' . $promoter . '/' . $appUuid . '/' . base64_encode($appPath) . '/' . $videoId . '/' . $authDy);
+            $res = $this->client->post('/service/v1/publish/video', [
+                'videoId' => $videoId,
+                'videoUuid' => $videoUuid,
+                'userUuid' => $userUuid,
+                'appUuid' => $appUuid,
+                'appPath' => $appPath,
+                'authDyUuid' => $authDy,
+            ]);
             return $this->result($res);
         } catch (\Throwable $th) {
             throw $th;
