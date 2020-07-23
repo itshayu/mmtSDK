@@ -37,19 +37,15 @@ class Api
      * @param ResponseInterface $response
      * @return void
      */
-    public function result(ResponseInterface $response) : array
+    public function result(ResponseInterface $response) : ?array
     {
-        if ($response->getStatusCode() !== 200) {
-            throw new \Exception($response->getBody());
-        }
+        // if ($response->getStatusCode() !== 200) {
+        //     throw new \Exception($response->getBody());
+        // }
         try {
-            $res = json_decode($response->getBody(), true);
-            if ($res['code'] === 200) {
-                return $res['data'];
-            }
-            throw new \Exception($res);
+            return json_decode($response->getBody(), true);
         } catch (\Throwable $th) {
-            throw new \Exception($th->getMessage());
+            throw $th;
         }
     }
 
@@ -58,7 +54,7 @@ class Api
      *
      * @return void
      */
-    public function report(array $data) : array
+    public function report(array $data) : ?array
     {
         try {
             $res = $this->client->post('/service/v1/report', $data);
@@ -74,7 +70,7 @@ class Api
      * @param string $promoter
      * @return ResponseInterface
      */
-    public function getAuthUser(string $promoter) : array
+    public function getAuthUser(string $promoter) : ?array
     {
         try {
             $res = $this->client->get('/service/v1/getAuthUser/' . $promoter);
@@ -91,10 +87,12 @@ class Api
      * @param string $appUuid
      * @return ResponseInterface
      */
-    public function reportVisits(string $promoter, string $appUuid) : array
+    public function reportVisits(string $promoter, string $appUuid, string $videoUuid) : ?array
     {
         try {
-            $res = $this->client->get('/service/v1/report/visits/' . $promoter . '/' . $appUuid);
+            $res = $this->client->get(
+                sprintf('/service/v1/report/visits/%s/%s/%s', $promoter, $appUuid, $videoUuid)
+            );
             return $this->result($res);
         } catch (\Throwable $th) {
             throw $th;
@@ -119,7 +117,7 @@ class Api
         string $appUuid,
         string $appPath,
         string $authDy
-    ) : array
+    ) : ?array
     {
         try {
             $res = $this->client->post('/service/v1/publish/video', [

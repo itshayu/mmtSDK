@@ -30,14 +30,15 @@ class ClientTest extends TestCase
     public function testReport()
     {
         $res = $this->client->report([
-            'associate' => '391bb884-cd3b-4ca2-b096-45a83cbf3f93',
+            'associate' => '9e4238a4-0e80-4095-8de5-cb86c03a6bac',
             'app_uuid' => '6571dba4-ec3a-4272-97f3-630d9bd8e182',
             'path' => '/index/index?sid=17',
             'platform' => 52,
             'share_mode' => 1,
+            'video_uuid' => '1668d71c-686f-4ccb-a095-1af88f991241'
         ]);
-        echo $res->getBody();
-        // print_r((string)$res->getBody())
+        var_dump($res);
+        exit();
     }
 
     /**
@@ -49,8 +50,21 @@ class ClientTest extends TestCase
      */
     public function testReportVisits()
     {
-        $res = $this->client->reportVisits('b8f3176e-161b-405f-a7cd-9bba78f751b8', '6571dba4-ec3a-4272-97f3-630d9bd8e182');
-        echo $res->getBody();
+        /**
+         * 增加当日访问量
+         *
+         * @param string $promoter 推广者uuid
+         * @param string $appUuid 应用uuid
+         * @param string $vedioUuid 视频uuid
+         * @return void
+         */
+        $res = $this->client->reportVisits(
+            'b8f3176e-161b-405f-a7cd-9bba78f751b8',
+            '6571dba4-ec3a-4272-97f3-630d9bd8e182',
+            ''
+            // '1668d71c-686f-4ccb-a095-1af88f991241'
+        );
+        var_dump($res);
         exit();
         // print_r(json_decode((string)$res->getBody()));
     }
